@@ -15,12 +15,21 @@ admin.initializeApp({
   databaseURL: "https://vc-deca.firebaseio.com"
 });
 
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js')); 
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
 }
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  
+var db = admin.database().ref();
+
+client.login(botconfig.token);
 
 client.on("ready", () => {
     console.log(`${client.user.username} is online!`);
@@ -36,20 +45,39 @@ client.on("message", (message) => {
         console.log(`Command ${command} does not exist`);
         return;
     };
-    client.commands.get(command).execute(message, args);
-    if (botconfig.dev_prefix != "") {
-        message.channel.send(new Discord.RichEmbed().setFooter('NOTE: This is a Dev Command. Some things may be broken.'));
-    }
+    client.commands.get(command).execute(null, message, args).then(() => {
+        if (botconfig.dev_prefix != "") {
+            message.channel.send(new Discord.RichEmbed().setFooter('NOTE: This is a Dev Command. Some things may be broken.'));
+        }
+    });
 });
 
-client.login(botconfig.token);
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
+db.child("chat").child("dev").on("child_added", function(snapshot) {
+    var message = snapshot.val();
+    console.log(message.author + ": " + message.message);
+    // Don't send notifications for nsfw messages
+    if (message.nsfw) return;
+    // Send notification
+    admin.messaging().send({
+        topic: 'DEV', // TODO: Replace this with GLOBAL_CHAT
+        notification: {
+            title: message.author,
+            body: message.message
+        }
+    })
+        .then((response) => {
+            console.log('Successfully sent message:', response);
+        });
+    // Check if message contains bot command
+    if (!message.message.toLowerCase().startsWith(botconfig.dev_prefix + botconfig.prefix) || message.role == "Bot") return;
+    const args = message.message.slice((botconfig.dev_prefix + botconfig.prefix).length).split(/ +/);
+    const command = args.shift().toLowerCase();
+    if (!client.commands.has(command)) {
+        console.log(`Command ${command} does not exist`);
+        return;
+    };
+    client.commands.get(command).execute(snapshot, null, args);
 });
-
-var db = admin.database().ref();
 
 rl.on('line', (input) => {
     // Parse user input
@@ -60,5 +88,5 @@ rl.on('line', (input) => {
         console.log(`Command ${command} does not exist`);
         return;
     };
-    client.commands.get(command).execute(null, args);
+    client.commands.get(command).execute(null, null, args);
 });

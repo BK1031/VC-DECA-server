@@ -10,11 +10,7 @@ module.exports = {
         if (message != null) {
             // Discord message
             db.child("testing").push().set("Server - Admin").then(() => {
-                message.channel.send(new Discord.RichEmbed()
-                    .setAuthor('VC DECA Bot')
-                    .setColor(('#0073CE'))
-                    .setDescription('Hello, I am the VC DECA Bot!')
-                );
+                message.channel.send("Test value uploaded: 'Server - Admin'");
             });
         }
         else if (snapshot != null) {
@@ -36,7 +32,9 @@ module.exports = {
         }
         else {
             // Console time!
-            console.log('Hello, I am the VC DECA Bot!');
+            db.child("testing").push().set("Server - Admin").then(() => {
+                console.log("Test value uploaded: 'Server - Admin'");
+            });
         }
 	},
 };

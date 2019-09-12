@@ -45,11 +45,10 @@ client.on("message", (message) => {
         console.log(`Command ${command} does not exist`);
         return;
     };
-    client.commands.get(command).execute(null, message, args).then(() => {
-        if (botconfig.dev_prefix != "") {
-            message.channel.send(new Discord.RichEmbed().setFooter('NOTE: This is a Dev Command. Some things may be broken.'));
-        }
-    });
+    client.commands.get(command).execute(null, message, args);
+    if (botconfig.dev_prefix != "") {
+        message.channel.send(new Discord.RichEmbed().setFooter('NOTE: This is a Dev Command. Some things may be broken.'));
+    }
 });
 
 db.child("chat").child("dev").on("child_added", function(snapshot) {
@@ -64,10 +63,9 @@ db.child("chat").child("dev").on("child_added", function(snapshot) {
             title: message.author,
             body: message.message
         }
-    })
-        .then((response) => {
+    }).then((response) => {
             console.log('Successfully sent message:', response);
-        });
+    });
     // Check if message contains bot command
     if (!message.message.toLowerCase().startsWith(botconfig.dev_prefix + botconfig.prefix) || message.role == "Bot") return;
     const args = message.message.slice((botconfig.dev_prefix + botconfig.prefix).length).split(/ +/);

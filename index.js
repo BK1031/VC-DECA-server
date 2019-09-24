@@ -10,6 +10,8 @@ client.commands = new Discord.Collection();
 
 var serviceAccount = require("./serviceAccountKey.json");
 
+var chatNotify = false;
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://vc-deca.firebaseio.com"
@@ -57,6 +59,7 @@ db.child("chat").child("dev").on("child_added", function(snapshot) {
     // Don't send notifications for nsfw messages
     if (message.nsfw) return;
     // Send notification
+    if (!chatNotify) return;
     admin.messaging().send({
         topic: 'DEV', // TODO: Replace this with GLOBAL_CHAT
         notification: {
@@ -64,10 +67,11 @@ db.child("chat").child("dev").on("child_added", function(snapshot) {
             body: message.message
         }
     }).then((response) => {
-            console.log('Successfully sent message:', response);
+        console.log('Successfully sent message:', response);
     });
     // Check if message contains bot command
     if (!message.message.toLowerCase().startsWith(botconfig.dev_prefix + botconfig.prefix) || message.role == "Bot") return;
+    if (botconfig.dev_prefix != "" && (botconfig.devs.indexOf(message.author) == -1)) return;
     const args = message.message.slice((botconfig.dev_prefix + botconfig.prefix).length).split(/ +/);
     const command = args.shift().toLowerCase();
     if (!client.commands.has(command)) {
@@ -87,4 +91,23 @@ rl.on('line', (input) => {
         return;
     };
     client.commands.get(command).execute(null, null, args);
+});
+
+// Push Notificaton Handler
+db.child("notifications").on("child_added", (snapshot) => {
+    var notification = snapshot.val();
+    notification.topic.forEach(element => {
+        if (element != "") {
+            admin.messaging().send({
+                topic: element,
+                notification: {
+                    title: notification.title,
+                    body: notification.body
+                }
+            }).then((response) => {
+                console.log('Successfully sent message:', response);
+                db.child("notifications").child(snapshot.ref.path.pieces_[1]).set(null);
+            });
+        }
+    });
 });

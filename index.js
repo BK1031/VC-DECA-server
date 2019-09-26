@@ -10,8 +10,6 @@ client.commands = new Discord.Collection();
 
 var serviceAccount = require("./serviceAccountKey.json");
 
-var chatNotify = false;
-
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://vc-deca.firebaseio.com"
@@ -59,7 +57,7 @@ db.child("chat").child("dev").on("child_added", function(snapshot) {
     // Don't send notifications for nsfw messages
     if (message.nsfw) return;
     // Send notification
-    if (!chatNotify) return;
+    if (!botconfig["notify"]) return;
     admin.messaging().send({
         topic: 'DEV', // TODO: Replace this with GLOBAL_CHAT
         notification: {

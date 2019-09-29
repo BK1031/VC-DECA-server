@@ -15,7 +15,13 @@ admin.initializeApp({
   databaseURL: "https://vc-deca.firebaseio.com"
 });
 
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js')); 
+var commandFiles;
+if (botconfig.dev_prefix != "") {
+    commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+}
+else {
+    commandFiles = fs.readdirSync('./VC-DECA-server/commands').filter(file => file.endsWith('.js')); 
+}
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);

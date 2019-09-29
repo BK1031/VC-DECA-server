@@ -15,21 +15,11 @@ admin.initializeApp({
   databaseURL: "https://vc-deca.firebaseio.com"
 });
 
-var commandFiles;
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js')); 
 
-if (botconfig.dev_prefix != "") {
-    commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-    for (const file of commandFiles) {
-        const command = require(`./commands/${file}`);
-        client.commands.set(command.name, command);
-    }
-}
-else {
-    commandFiles = fs.readdirSync('./VC-DECA-server/commands').filter(file => file.endsWith('.js')); 
-    for (const file of commandFiles) {
-        const command = require(`./VC-DECA-server/commands/${file}`);
-        client.commands.set(command.name, command);
-    }
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.name, command);
 }
 
 const rl = readline.createInterface({

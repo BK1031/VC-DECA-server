@@ -8,4 +8,4 @@ echo "Deploying to mywb.vcs.net"
 ssh supadmin@mywb.vcs.net 'cd VC-DECA-server/; git pull'
 echo "Deployment complete"
 echo "Restarting server"
-ssh supadmin@mywb.vcs.net 'source ./wb_commands.sh; vcdeca restart -nc'
+ssh supadmin@mywb.vcs.net 'source ./wb_commands.sh; vcdeca restart'

@@ -109,3 +109,10 @@ db.child("notifications").on("child_added", (snapshot) => {
         }
     });
 });
+
+db.child("users").on("child_added", (snapshot) => {
+    var user = snapshot.val();
+    if (user.title == null) {
+        db.child("users").child(snapshot.key).child("title").set("")
+    }
+});

@@ -51,32 +51,61 @@ client.on("message", (message) => {
     }
 });
 
-db.child("chat").child("dev").on("child_added", function(snapshot) {
-    var message = snapshot.val();
-    console.log(message.author + ": " + message.message);
-    // Don't send notifications for nsfw messages
-    if (message.nsfw) return;
-    // Send notification
-    if (!botconfig["notify"]) return;
-    admin.messaging().send({
-        topic: 'DEV', // TODO: Replace this with GLOBAL_CHAT
-        notification: {
-            title: message.author,
-            body: message.message
+db.child("chat").on("child_added", (snapshot) => {
+    console.log(snapshot.key)
+    db.child("chat").child(snapshot.key).on("child_added", (chatshot) => {
+        var message = chatshot.val();
+        console.log(message.author + ": " + message.message);
+        // Don't send notifications for nsfw messages
+        if (message.nsfw) return;
+        // Send notification
+        if (snapshot.key == "global") {
+            if (!botconfig["notify"]) return;
+            admin.messaging().send({
+                topic: "GLOBAL_CHAT",
+                notification: {
+                    title: `[General Chat] ${message.author}`,
+                    body: message.message
+                }
+            }).then((response) => {
+                console.log('Successfully sent message in GENERAL:', response);
+            });
         }
-    }).then((response) => {
-        console.log('Successfully sent message:', response);
+        else if (snapshot.key == "dev") {
+            if (!botconfig["notify"]) return;
+            admin.messaging().send({
+                topic: "DEV",
+                notification: {
+                    title: `[Dev Env] ${message.author}`,
+                    body: message.message
+                }
+            }).then((response) => {
+                console.log('Successfully sent message in DEV:', response);
+            });
+        }
+        else {
+            if (!botconfig["notify"]) return;
+            admin.messaging().send({
+                topic: snapshot.key,
+                notification: {
+                    title: `[${snapshot.key}] ${message.author}`,
+                    body: message.message
+                }
+            }).then((response) => {
+                console.log(`Successfully sent message in ${snapshot.key}:`, response);
+            });
+        }
+        // Check if message contains bot command
+        if (!message.message.toLowerCase().startsWith(botconfig.dev_prefix + botconfig.prefix) || message.role == "Bot") return;
+        if (botconfig.dev_prefix != "" && (botconfig.devs.indexOf(message.author) == -1)) return;
+        const args = message.message.slice((botconfig.dev_prefix + botconfig.prefix).length).split(/ +/);
+        const command = args.shift().toLowerCase();
+        if (!client.commands.has(command)) {
+            console.log(`Command ${command} does not exist`);
+            return;
+        };
+        client.commands.get(command).execute(chatshot, null, args);
     });
-    // Check if message contains bot command
-    if (!message.message.toLowerCase().startsWith(botconfig.dev_prefix + botconfig.prefix) || message.role == "Bot") return;
-    if (botconfig.dev_prefix != "" && (botconfig.devs.indexOf(message.author) == -1)) return;
-    const args = message.message.slice((botconfig.dev_prefix + botconfig.prefix).length).split(/ +/);
-    const command = args.shift().toLowerCase();
-    if (!client.commands.has(command)) {
-        console.log(`Command ${command} does not exist`);
-        return;
-    };
-    client.commands.get(command).execute(snapshot, null, args);
 });
 
 rl.on('line', (input) => {

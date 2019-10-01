@@ -1295,7 +1295,8 @@ var infoGrades = `
 
 module.exports = {
 	name: 'register',
-	description: 'Generate csv for new deca members',
+    description: 'Generate csv for new deca members',
+    dev: false,
 	execute(snapshot, message, args) {
         if (message != null) {
             // Discord message

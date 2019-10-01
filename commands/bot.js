@@ -5,7 +5,8 @@ var db = admin.database().ref();
 
 module.exports = {
 	name: 'bot',
-	description: 'Get info about the VC DECA Bot',
+    description: 'Get info about the VC DECA Bot',
+    dev: false,
 	execute(snapshot, message, args) {
         if (message != null) {
             // Discord message

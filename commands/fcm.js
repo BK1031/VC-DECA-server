@@ -5,7 +5,8 @@ var db = admin.database().ref();
 
 module.exports = {
 	name: 'fcm',
-	description: 'Send a message to a certain user or topic',
+    description: 'Send a message to a certain user or topic',
+    dev: true,
 	execute(snapshot, message, args) {
         if (message != null) {
             // Discord message

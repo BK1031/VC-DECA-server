@@ -5,7 +5,8 @@ var db = admin.database().ref();
 
 module.exports = {
 	name: 'msgtest',
-	description: 'Send a test push notification to devs',
+    description: 'Send a test push notification to devs',
+    dev: true,
 	execute(snapshot, message, args) {
         if (message != null) {
             // Discord message

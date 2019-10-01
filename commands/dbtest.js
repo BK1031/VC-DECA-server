@@ -5,7 +5,8 @@ var db = admin.database().ref();
 
 module.exports = {
 	name: 'dbtest',
-	description: 'Test upload to VC DECA Firebase',
+    description: 'Test upload to VC DECA Firebase',
+    dev: true,
 	execute(snapshot, message, args) {
         if (message != null) {
             // Discord message

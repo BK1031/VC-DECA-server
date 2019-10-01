@@ -83,6 +83,30 @@ db.child("chat").on("child_added", (snapshot) => {
                 console.log('Successfully sent message in DEV:', response);
             });
         }
+        else if (snapshot.key == "officer") {
+            if (!botconfig["notify"]) return;
+            admin.messaging().send({
+                topic: "OFFICER_CHAT",
+                notification: {
+                    title: `[Officer Chat] ${message.author}`,
+                    body: message.message
+                }
+            }).then((response) => {
+                console.log('Successfully sent message in DEV:', response);
+            });
+        }
+        else if (snapshot.key == "leader") {
+            if (!botconfig["notify"]) return;
+            admin.messaging().send({
+                topic: "LEADER_CHAT",
+                notification: {
+                    title: `[Leader Chat] ${message.author}`,
+                    body: message.message
+                }
+            }).then((response) => {
+                console.log('Successfully sent message in DEV:', response);
+            });
+        }
         else {
             if (!botconfig["notify"]) return;
             admin.messaging().send({
@@ -104,6 +128,20 @@ db.child("chat").on("child_added", (snapshot) => {
             console.log(`Command ${command} does not exist`);
             return;
         };
+        if (client.commands.get(command).dev && botconfig.devs.indexOf(message.author) == -1) {
+            db.child("chat").child(snapshot.key).push().set({
+                "author": "VC DECA Bot",
+                "color": "#0073CE",
+                "date": "",
+                "message": "Hey, you can't access that command!",
+                "nsfw": false,
+                "profileUrl": "https://github.com/Equinox-Initiative/VC-DECA-flutter/blob/master/images/logo_white/ios/iTunesArtwork@3x.png?raw=true",
+                "role": "Bot",
+                "type": "text",
+                "userID": "bot1"
+            });
+            return;
+        }
         client.commands.get(command).execute(chatshot, null, args);
     });
 });

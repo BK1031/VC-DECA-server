@@ -6,7 +6,8 @@ var db = admin.database().ref();
 
 module.exports = {
 	name: 'notify',
-	description: 'Toggle the chat notification service',
+    description: 'Toggle the chat notification service',
+    dev: true,
 	execute(snapshot, message, args) {
         if (message != null) {
             // Discord message

@@ -6,7 +6,8 @@ var db = admin.database().ref();
 
 module.exports = {
 	name: 'get',
-	description: 'Get permissions for a certain user based on name',
+    description: 'Get permissions for a certain user based on name',
+    dev: false,
 	execute(snapshot, message, args) {
         var found = false;
         if (message != null) {

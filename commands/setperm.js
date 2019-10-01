@@ -5,7 +5,8 @@ var db = admin.database().ref();
 
 module.exports = {
 	name: 'setperm',
-	description: 'Set db perms for a certain user.',
+    description: 'Set db perms for a certain user.',
+    dev: true,
 	execute(snapshot, message, args) {
         if (message != null) {
             // Discord message

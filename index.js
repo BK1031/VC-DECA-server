@@ -169,11 +169,11 @@ db.child("notifications").on("child_added", (snapshot) => {
                     title: notification.title,
                     body: notification.body
                 }
-            }).then((response) => {
-                console.log('Successfully sent message:', response);
-                db.child("notifications").child(snapshot.ref.path.pieces_[1]).set(null);
-            });
+            })
         }
+    }).then((response) => {
+        console.log('Successfully sent message:', response);
+        db.child("notifications").child(snapshot.ref.path.pieces_[1]).set(null);
     });
 });
 

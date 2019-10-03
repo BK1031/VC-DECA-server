@@ -161,20 +161,22 @@ rl.on('line', (input) => {
 // Push Notificaton Handler
 db.child("notifications").on("child_added", (snapshot) => {
     var notification = snapshot.val();
+    console.log(`New Notification: ${notification.title} - ${notification.body}`)
     notification.topic.forEach(element => {
         if (element != "") {
+            console.log(element)
             admin.messaging().send({
                 topic: element,
                 notification: {
                     title: notification.title,
                     body: notification.body
                 }
-            })
+            }).then(() => {
+                console.log('Successfully sent message:', response);
+            });
         }
-    }).then((response) => {
-        console.log('Successfully sent message:', response);
-        db.child("notifications").child(snapshot.ref.path.pieces_[1]).set(null);
     });
+    db.child("notifications").child(snapshot.ref.path.pieces_[1]).set(null);
 });
 
 db.child("users").on("child_added", (snapshot) => {

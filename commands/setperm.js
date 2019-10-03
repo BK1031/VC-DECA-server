@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 var admin = require('firebase-admin');
+const https = require('https');
 
 var db = admin.database().ref();
 
@@ -8,10 +9,32 @@ module.exports = {
     description: 'Set db perms for a certain user.',
     dev: true,
 	execute(snapshot, message, args) {
+        var found = false;
         if (message != null) {
             // Discord message
-            var targetID = "";
-            console.log(args);
+            if (args.length >= 3) {
+                https.get('https://vc-deca.firebaseio.com/users/.json', (resp) => {
+                    let data = '';
+                    resp.on('data', (chunk) => {
+                      data += chunk;
+                    });
+                    resp.on('end', () => {
+                        var json = JSON.parse(data)
+                        Object.keys(json).forEach((key) => {
+                            if (json[key]["name"] == args[0] + " " + args[1]) {
+                                found = true;
+                                
+                            }
+                        });
+                        if (!found) {
+                            message.channel.send("Failed to find " + args[0] + " " + args[1])
+                        }
+                    });
+                  });
+            }
+            else {
+                message.channel.send('Command Usage: ```?setperm [firstName] [lastName] [perm1] [perm2] ...```');
+            }
         }
         else if (snapshot != null) {
             // VC DECA App ChatMessage

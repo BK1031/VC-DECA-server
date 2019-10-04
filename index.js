@@ -171,7 +171,7 @@ db.child("notifications").on("child_added", (snapshot) => {
                     title: notification.title,
                     body: notification.body
                 }
-            }).then(() => {
+            }).then((response) => {
                 console.log('Successfully sent message:', response);
             });
         }
@@ -179,9 +179,9 @@ db.child("notifications").on("child_added", (snapshot) => {
     db.child("notifications").child(snapshot.ref.path.pieces_[1]).set(null);
 });
 
-db.child("users").on("child_added", (snapshot) => {
-    var user = snapshot.val();
-    if (user.title == null) {
-        db.child("users").child(snapshot.key).child("title").set("")
-    }
-});
+// db.child("users").on("child_added", (snapshot) => {
+//     var user = snapshot.val();
+//     if (user.title == null) {
+//         db.child("users").child(snapshot.key).child("title").set("")
+//     }
+// });

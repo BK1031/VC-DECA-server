@@ -23,7 +23,10 @@ module.exports = {
                         Object.keys(json).forEach((key) => {
                             if (json[key]["name"] == args[0] + " " + args[1]) {
                                 found = true;
-                                
+                                var user = json[key]
+                                for (var i = 2; i < args.length; i++) {
+                                    
+                                }
                             }
                         });
                         if (!found) {

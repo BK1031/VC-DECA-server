@@ -11,10 +11,10 @@ module.exports = {
         if (message != null) {
             // Discord message
             message.channel.send(new Discord.RichEmbed()
-			.setAuthor('VC DECA Bot')
-            .setColor('#0073CE')
-            .setDescription('Hello, I am the VC DECA Bot!')
-		);
+                .setAuthor('VC DECA Bot')
+                .setColor('#0073CE')
+                .setDescription('Hello, I am the VC DECA Bot!')
+		    );
         }
         else if (snapshot != null) {
             // VC DECA App ChatMessage

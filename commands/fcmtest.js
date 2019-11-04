@@ -4,7 +4,7 @@ var admin = require('firebase-admin');
 var db = admin.database().ref();
 
 module.exports = {
-	name: 'msgtest',
+	name: 'fcmtest',
     description: 'Send a test push notification to devs',
     dev: true,
 	execute(snapshot, message, args) {
@@ -14,7 +14,7 @@ module.exports = {
                 topic: 'DEV', // TODO: Replace this with GLOBAL_CHAT
                 notification: {
                     title: 'Dev Test',
-                    body: 'Test FCM push notification for devs'
+                    body: 'Test FCM push notification for devs, sent from Discord'
                 }
             }).then((response) => {
                 message.channel.send('Successfully sent message: ' + response.toString());

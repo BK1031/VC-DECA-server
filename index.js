@@ -69,6 +69,25 @@ db.child("chat").on("child_added", (snapshot) => {
                 }
             }).then((response) => {
                 console.log('Successfully sent message in GENERAL:', response);
+                if (message.type == "text") {
+                    client.channels.get('639004912977707028').send(new Discord.RichEmbed()
+                        .setAuthor(message.author, message.profileUrl)
+                        .setTitle(message.message)
+                        .setDescription(snapshot.key)
+                        .setFooter(response)
+                        .setTimestamp()
+                    );
+                }
+                else {
+                    client.channels.get('639004912977707028').send(new Discord.RichEmbed()
+                        .setAuthor(message.author, message.profileUrl)
+                        .setTitle("Image Upload")
+                        .setDescription(snapshot.key)
+                        .setThumbnail(message.message)
+                        .setFooter(response)
+                        .setTimestamp()
+                    );
+                }
             });
         }
         else if (snapshot.key == "dev") {
@@ -81,6 +100,25 @@ db.child("chat").on("child_added", (snapshot) => {
                 }
             }).then((response) => {
                 console.log('Successfully sent message in DEV:', response);
+                if (message.type == "text") {
+                    client.channels.get('639004912977707028').send(new Discord.RichEmbed()
+                        .setAuthor(message.author, message.profileUrl)
+                        .setTitle(message.message)
+                        .setDescription(snapshot.key)
+                        .setFooter(response)
+                        .setTimestamp()
+                    );
+                }
+                else {
+                    client.channels.get('639004912977707028').send(new Discord.RichEmbed()
+                        .setAuthor(message.author, message.profileUrl)
+                        .setTitle("Image Upload")
+                        .setDescription(snapshot.key)
+                        .setThumbnail(message.message)
+                        .setFooter(response)
+                        .setTimestamp()
+                    );
+                }
             });
         }
         else if (snapshot.key == "officer") {
@@ -92,7 +130,26 @@ db.child("chat").on("child_added", (snapshot) => {
                     body: message.message
                 }
             }).then((response) => {
-                console.log('Successfully sent message in DEV:', response);
+                console.log('Successfully sent message in OFFICER:', response);
+                if (message.type == "text") {
+                    client.channels.get('639004912977707028').send(new Discord.RichEmbed()
+                        .setAuthor(message.author, message.profileUrl)
+                        .setTitle(message.message)
+                        .setDescription(snapshot.key)
+                        .setFooter(response)
+                        .setTimestamp()
+                    );
+                }
+                else {
+                    client.channels.get('639004912977707028').send(new Discord.RichEmbed()
+                        .setAuthor(message.author, message.profileUrl)
+                        .setTitle("Image Upload")
+                        .setDescription(snapshot.key)
+                        .setThumbnail(message.message)
+                        .setFooter(response)
+                        .setTimestamp()
+                    );
+                }
             });
         }
         else if (snapshot.key == "leader") {
@@ -104,7 +161,26 @@ db.child("chat").on("child_added", (snapshot) => {
                     body: message.message
                 }
             }).then((response) => {
-                console.log('Successfully sent message in DEV:', response);
+                console.log('Successfully sent message in LEADER:', response);
+                if (message.type == "text") {
+                    client.channels.get('639004912977707028').send(new Discord.RichEmbed()
+                        .setAuthor(message.author, message.profileUrl)
+                        .setTitle(message.message)
+                        .setDescription(snapshot.key)
+                        .setFooter(response)
+                        .setTimestamp()
+                    );
+                }
+                else {
+                    client.channels.get('639004912977707028').send(new Discord.RichEmbed()
+                        .setAuthor(message.author, message.profileUrl)
+                        .setTitle("Image Upload")
+                        .setDescription(snapshot.key)
+                        .setThumbnail(message.message)
+                        .setFooter(response)
+                        .setTimestamp()
+                    );
+                }
             });
         }
         else {
@@ -117,6 +193,25 @@ db.child("chat").on("child_added", (snapshot) => {
                 }
             }).then((response) => {
                 console.log(`Successfully sent message in ${snapshot.key}:`, response);
+                if (message.type == "text") {
+                    client.channels.get('639004912977707028').send(new Discord.RichEmbed()
+                        .setAuthor(message.author, message.profileUrl)
+                        .setTitle(message.message)
+                        .setDescription(snapshot.key)
+                        .setFooter(response)
+                        .setTimestamp()
+                    );
+                }
+                else {
+                    client.channels.get('639004912977707028').send(new Discord.RichEmbed()
+                        .setAuthor(message.author, message.profileUrl)
+                        .setTitle("Image Upload")
+                        .setDescription(snapshot.key)
+                        .setThumbnail(message.message)
+                        .setFooter(response)
+                        .setTimestamp()
+                    );
+                }
             });
         }
         // Check if message contains bot command

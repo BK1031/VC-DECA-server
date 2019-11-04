@@ -5,7 +5,5 @@ git add .
 git commit -m "$commit_message"
 git push
 echo "Deploying to mywb.vcs.net"
-ssh supadmin@mywb.vcs.net 'cd VC-DECA-server/; git pull'
+ssh supadmin@mywb.vcs.net 'pm2 stop VC-DECA-server; cd VC-DECA-server/; git pull; pm2 start VC-DECA-server;'
 echo "Deployment complete"
-echo "Restarting server"
-ssh supadmin@mywb.vcs.net 'source ./wb_commands.sh; vcdeca restart'

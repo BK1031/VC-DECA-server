@@ -10,7 +10,7 @@ module.exports = {
 	execute(snapshot, message, args) {
         if (message != null) {
             // Discord message
-            if (args.length == 3) {
+            if (args.length >= 3) {
                 if (args[0].length > 20) {
                     // FCM Token Given
                     admin.messaging().send({
@@ -57,7 +57,7 @@ module.exports = {
                             "author": "VC DECA Bot",
                             "color": "#0073CE",
                             "date": "",
-                            "message": 'Successfully sent message to topic ' + args[0] + ': ' + response.toString(),
+                            "message": 'Successfully sent message to user with token ' + args[0] + ': ' + response.toString(),
                             "nsfw": false,
                             "profileUrl": "https://github.com/Equinox-Initiative/VC-DECA-flutter/blob/master/images/logo_white/ios/iTunesArtwork@3x.png?raw=true",
                             "role": "Bot",

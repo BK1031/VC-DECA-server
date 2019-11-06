@@ -5,14 +5,15 @@ const https = require('https');
 var db = admin.database().ref();
 
 module.exports = {
-	name: 'setperm',
-    description: 'Set db perms for a certain user.',
+	name: 'cmentor',
+    description: 'Set db perms for a cluster mentor user.',
     dev: true,
 	execute(snapshot, message, args) {
         var found = false;
+        var permList = ["LEADER_CHAT_VIEW", "LEADER_CHAT_SEND", "CONFERENCE_MEDIA_UPLOAD"];
         if (message != null) {
             // Discord message
-            if (args.length >= 3) {
+            if (args.length == 2) {
                 https.get('https://vc-deca.firebaseio.com/users/.json', (resp) => {
                     let data = '';
                     resp.on('data', (chunk) => {
@@ -24,15 +25,16 @@ module.exports = {
                             if (json[key]["name"] == args[0] + " " + args[1]) {
                                 found = true;
                                 var user = json[key]
-                                for (var i = 2; i < args.length; i++) {
-                                    if (JSON.stringify(user["perms"]).indexOf(args[i]) < 0) {
-                                        db.child("users").child(key).child("perms").push().set(args[i]);
-                                        message.channel.send("Added perm: " + args[i])
-                                        console.log("Added perm: " + args[i]);
+                                db.child("users").child(key).child("role").set("Cluster Mentor");
+                                for (var i = 0; i < permList.length; i++) {
+                                    if (JSON.stringify(user["perms"]).indexOf(permList[i]) < 0) {
+                                        db.child("users").child(key).child("perms").push().set(permList[i]);
+                                        message.channel.send("Added perm: " + permList[i])
+                                        console.log("Added perm: " + permList[i]);
                                     }
                                     else {
-                                        message.channel.send("User already has perm: " + args[i])
-                                        console.log("User already has perm: " + args[i]);
+                                        message.channel.send("User already has perm: " + permList[i])
+                                        console.log("User already has perm: " + permList[i]);
                                     }
                                 }
                             }
@@ -44,7 +46,7 @@ module.exports = {
                   });
             }
             else {
-                message.channel.send('Command Usage: ```?setperm [firstName] [lastName] [perm1] [perm2] ...```');
+                message.channel.send('Command Usage: ```?setperm [firstName] [lastName]```');
             }
         }
         else if (snapshot != null) {

@@ -187,6 +187,13 @@ rl.on('line', (input) => {
 db.child("notifications").on("child_added", (snapshot) => {
     var notification = snapshot.val();
     console.log(`New Notification: ${notification.title} - ${notification.body}`)
+    client.channels.get('639004912977707028').send(new Discord.RichEmbed()
+        .setColor('#f59b42')
+        .setAuthor(notification.title)
+        .setDescription(notification.body)
+        .setFooter('NOTIFICATION')
+        .setTimestamp()
+    );
     notification.topic.forEach(element => {
         if (element != "") {
             console.log(element)
@@ -198,6 +205,7 @@ db.child("notifications").on("child_added", (snapshot) => {
                 }
             }).then((response) => {
                 console.log('Successfully sent message:', response);
+                client.channels.get('639004912977707028').send(response);
             });
         }
     });
